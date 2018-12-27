@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sclience.poem.dao.PoetDao">
+    <resultMap id="poetResult" type="Poet">
+        <id column="id" property="poet_id"/>
+        <result column="name" property="poet_name"/>
+        <result column="created_at" property="createTime"/>
+        <result column="updated_at" property="updateTime"/>
+        <collection property="list" ofType="Poetry">
+            <id column="poetry_id" property="poetry_id"/>
+            <result column="poetry_content" property="poetry_content"/>
+            <result column="poetry_title" property="poetry_title"/>
+            <result column="poetry_created_at" property="poetry_createtime"/>
+            <result column="poetry_updated_at" property="poetry_updatetime"/>
+        </collection>
+    </resultMap>
+
+    <select id="selectPoetById" resultMap="poetResult" resultType="Poet">
+        SELECT
+	    p1.*, p2.id poetry_id,p2.content poetry_content,p2.title poetry_title,p2.created_at poetry_created_at,p2.updated_at poetry_updated_at
+        FROM
+	    poets p1
+        LEFT JOIN poetries p2 ON p1.id = p2.poet_id
+        where p1.id=#{poet_id}
+
+    </select>
+    <select id="selectAllPoet" resultMap="poetResult" resultType="Poet">
+      SELECT
+	    p1.*, p2.id poetry_id,p2.content poetry_content,p2.title poetry_title,p2.created_at poetry_created_at,p2.updated_at poetry_updated_at
+        FROM
+	    poets p1
+        LEFT JOIN poetries p2 ON p1.id = p2.poet_id
+
+    </select>
+
+    <select id="selectPoetInPages" resultMap="poetResult" resultType="Poet">
+        SELECT
+        p1.*, p2.id poetry_id,p2.content poetry_content,p2.title poetry_title,p2.created_at poetry_created_at,p2.updated_at poetry_updated_at
+        FROM
+        poets p1
+        LEFT JOIN poetries p2 ON p1.id = p2.poet_id
+        limit #{begin},#{pageSize}
+
+    </select>
+
+</mapper>
